@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/mmonte/philosophers/philo_one/header.h
+string.h
+-
+stdio.h
+-
+pthread.h
+-
+
+/Users/mmonte/philosophers/philo_one/main.c
+header.h
+/Users/mmonte/philosophers/philo_one/header.h
+
