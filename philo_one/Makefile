@@ -2,7 +2,7 @@ NAME = philo_one
 CC = clang
 HEADER = header.h
 CFLAG = -Wall -Werror -Wextra
-SRC = main.c
+SRC = main.c utils.c create_philo.c
 
 OBJ = $(SRC:.c=.o)
 .PHONY: all, clean, fclean, re
