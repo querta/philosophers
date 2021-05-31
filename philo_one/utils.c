@@ -29,6 +29,35 @@ int		ft_atoi(char *str)
 	return ((int)(sign * num));
 }
 
+uint64_t get_time(void)
+{
+	t_time tv;
+	uint64_t time;
+
+	time = -1;
+	gettimeofday(&tv, NULL);
+	time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+	return (time);
+}
+
+uint64_t timedelta(uint64_t saved_time)
+{
+	uint64_t time;
+
+	time = get_time() - saved_time;
+	return (time);
+}
+
+void msleep(uint64_t ms)
+{
+	uint64_t i;
+
+	i = 0;
+	// i = get_time();
+	while (i++ <= ms)
+		usleep(500);
+}
+
 void	*ft_calloc(size_t count, size_t size)
 {
 	char	*mem;
