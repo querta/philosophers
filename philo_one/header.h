@@ -7,6 +7,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/time.h>
+# include <stdint.h>
 
 typedef pthread_mutex_t mut_t;
 typedef struct 	timeval t_time;

@@ -2,11 +2,11 @@
 
 void act(void *mn)
 {
-    t_main *m;
-    t_phil *ph;
+	t_main *m;
+	t_phil *ph;
 
-    m = (t_main *)mn;
-    ph = &(m->ph[m->id]);
+	m = (t_main *)mn;
+	ph = &(m->ph[m->id]);
 
 }
 
@@ -17,8 +17,8 @@ void create_threads(t_main *m)
 	i = 0;
 	while (i < m->amount)
 	{
-	    m->id = i;
-	    pthread_create(&(m->ph[i].thread), NULL, &act, (void *)m);
-	    i++;
+		m->id = i;
+		// pthread_create(&(m->ph[i].thread), NULL, &act, (void *)m);
+		i++;
 	}
 }

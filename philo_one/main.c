@@ -49,7 +49,7 @@ static void	struct_init(char **argv, t_main *m)
 	while (i < m->amount)
 		pthread_mutex_init(&(m->forks[i++]), NULL);
 	m->start_time = get_time();
-	printf("start time %lld\n", m->start_time);
+	printf("start time %lu\n", m->start_time);
 }
 
 //static void	philo_run(char **params, int noeat)
