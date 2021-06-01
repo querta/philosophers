@@ -12,24 +12,37 @@
 typedef pthread_mutex_t mut_t;
 typedef struct 	timeval t_time;
 
+typedef enum		e_msg
+{
+	FORK,
+	EAT,
+	SLEEP,
+	THINK,
+	DIED
+}					t_msg;
+
 typedef struct 		s_phil
 {
 	int				id;
-//	int				dead;
+	int				dead;
 	pthread_t		*thread;
+	pthread_t		monitor;
 	pthread_mutex_t *left;
 	pthread_mutex_t *right;
 	uint64_t 		time;
 	int				ate;
+	struct	s_main	*m;
 }					t_phil;
 
 
 typedef struct		s_main
 {
 	uint64_t 		start_time;
-	pthread_t		*thread;
+	// pthread_t		*thread;
 	int				id;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	mutex;
+	pthread_mutex_t	print;
 	int				dead;
 	int				amount;
 	int				ttdie;

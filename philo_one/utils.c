@@ -52,24 +52,7 @@ void msleep(uint64_t ms)
 {
 	uint64_t i;
 
-	i = 0;
-	// i = get_time();
-	while (i++ <= ms)
+	i = get_time();
+	while (get_time() - i < ms)
 		usleep(500);
-}
-
-void	*ft_calloc(size_t count, size_t size)
-{
-	char	*mem;
-	int n;
-
-	n = count * size;
-	if ((mem = malloc(n)))
-	{
-		while (n--)
-			*mem++ = '\0';
-//		ft_bzero(mem, count * size);
-		return (mem);
-	}
-	return (NULL);
 }

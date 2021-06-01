@@ -14,8 +14,9 @@ void init_philo(t_main *m)
 	m->ph = (t_phil *)malloc(m->amount * sizeof(t_phil));
 	while (i < m->amount)
 	{
-		// m->ph[i].id = i;
+		m->ph[i].id = i;
 		m->ph[i].ate = m->eat_num;
+		m->ph[i].m = m;
 		m->ph[i].left = &m->forks[i];
 		if (m->ph[i].id == m->amount - 1)
 			m->ph[i].right = &m->forks[0];
@@ -39,17 +40,13 @@ static void	struct_init(char **argv, t_main *m)
 	if (argv[5])
 		m->eat_num = ft_atoi(argv[5]);
 	m->forks = (pthread_mutex_t *)malloc(m->amount * sizeof(pthread_mutex_t));
-//	m->ph = (t_phil *)malloc(m->amount * sizeof(t_phil));
-//	m->thread = (pthread_t *)malloc(m->amount * sizeof(pthread_t));
-	// set->spr = (t_curspr *)ft_calloc(set->sp->count,
-	// 	sizeof(t_curspr) * set->sp->count);
+	pthread_mutex_init(&m->mutex, NULL); 
+	pthread_mutex_init(&m->print, NULL); 
 	init_philo(m);
-	// m->ph = (t_phil *)malloc(m->amount * sizeof(t_phil));
 	i = 0;
 	while (i < m->amount)
 		pthread_mutex_init(&(m->forks[i++]), NULL);
 	m->start_time = get_time();
-	printf("start time %lu\n", m->start_time);
 }
 
 //static void	philo_run(char **params, int noeat)
@@ -75,16 +72,25 @@ int	main(int argc, char **argv)
 	if (argc >= 5 && argc <= 6)
 	{
 		struct_init(argv, m);
+		if (m->ttdie < 60 || m->ttsleep < 60 || m->tteat < 60)
+			return (printf("Time to die, Time to sleep, Time to eat shoul be > 60ms\n"));
 		// create_philo(m);
 		create_threads(m);
+		// int i = 0;
+		// while (i < m->amount)
+		// {
+		// 	pthread_join(*m->ph[i].thread, NULL);
+		// 	i++;
+		// }
 	}
-//		philo_run(argv, argc - 5);
 	else
 	{
 		printf("Incorrect number of arguments\n");
-		exit(1);
+		return (1);
 	}
 	return (0);
 }
 
 //  make re && ./philo_one 5 100 10 50 5
+//  make re && ./philo_one 5 200 60 60 2
+//  make re && ./philo_one 5 800 200 200 7
