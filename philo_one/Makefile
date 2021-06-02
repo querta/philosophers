@@ -1,7 +1,7 @@
 NAME = philo_one
 CC = clang
 HEADER = header.h
-CFLAG = -Wall -Werror -Wextra
+CFLAG = -Wall -Werror -Wextra -pthread
 SRC = main.c utils.c create_threads.c
 OBJ = $(SRC:.c=.o)
 

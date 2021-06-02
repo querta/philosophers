@@ -29,7 +29,7 @@ static int	check_args(int argc, char **argv, t_main *m)
 		printf("Incorrect number of arguments\n");
 	if (argv[5])
 		m->eat_num = ft_atoi(argv[5]);
-	if (m->amount <=1)
+	if (m->amount <= 1)
 		printf("Bad number of philosophers. Try > 1\n");
 	else if (argv[5] && m->eat_num < 1)
 		printf("Nobody ate. Try times to eat > 0 or blank\n");

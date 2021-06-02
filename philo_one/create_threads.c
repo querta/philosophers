@@ -5,7 +5,8 @@ static int	printmsg(t_phil *ph, t_msg msg)
 	if (ph->m->dead || !ph->ate)
 		return (1);
 	pthread_mutex_lock(&ph->m->print);
-	printf("%lldms %d ", timedelta(ph->m->start_time), ph->id + 1);
+	printf("%llums %d ", \
+		(unsigned long long)timedelta(ph->m->start_time), ph->id + 1);
 	if (msg == FORK)
 		printf("has taken a fork\n");
 	else if (msg == EAT)
