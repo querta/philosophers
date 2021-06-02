@@ -1,10 +1,10 @@
 #include "header.h"
 
-int		ft_atoi(char *str)
+int	ft_atoi(char *str)
 {
-	unsigned long long	num;
-	int					i;
-	int					sign;
+	uint64_t	num;
+	int			i;
+	int			sign;
 
 	num = 0;
 	i = 0;
@@ -19,7 +19,7 @@ int		ft_atoi(char *str)
 	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{
-		num = (unsigned long long)(num * 10 + str[i] - '0');
+		num = (uint64_t)(num * 10 + str[i] - '0');
 		if (num > 9223372036854775807 && sign == 1)
 			return (-1);
 		if (num > 9223372036854775807 && sign == -1)
@@ -29,10 +29,10 @@ int		ft_atoi(char *str)
 	return ((int)(sign * num));
 }
 
-uint64_t get_time(void)
+uint64_t	get_time(void)
 {
-	t_time tv;
-	uint64_t time;
+	struct timeval	tv;
+	uint64_t		time;
 
 	time = -1;
 	gettimeofday(&tv, NULL);
@@ -40,17 +40,17 @@ uint64_t get_time(void)
 	return (time);
 }
 
-uint64_t timedelta(uint64_t saved_time)
+uint64_t	timedelta(uint64_t saved_time)
 {
-	uint64_t time;
+	uint64_t	time;
 
 	time = get_time() - saved_time;
 	return (time);
 }
 
-void msleep(uint64_t ms)
+void	msleep(uint64_t ms)
 {
-	uint64_t i;
+	uint64_t	i;
 
 	i = get_time();
 	while (get_time() - i < ms)

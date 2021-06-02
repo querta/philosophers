@@ -1,17 +1,13 @@
 #include "header.h"
 
-//void	*print(void *buf)
-//{
-//	printf("%s\n", buf);
-//	return (NULL);
-//}
-
-void init_philo(t_main *m)
+static int	init_philo(t_main *m)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	m->ph = (t_phil *)malloc(m->amount * sizeof(t_phil));
+	if (!m->ph)
+		return (1);
 	while (i < m->amount)
 	{
 		m->ph[i].id = i;
@@ -24,11 +20,12 @@ void init_philo(t_main *m)
 			m->ph[i].right = &m->forks[i + 1];
 		i++;
 	}
+	return (0);
 }
 
-static void	struct_init(char **argv, t_main *m)
+static int	struct_init(char **argv, t_main *m)
 {
-	int i;
+	int	i;
 
 	m->dead = 0;
 	m->id = 0;
@@ -40,57 +37,62 @@ static void	struct_init(char **argv, t_main *m)
 	if (argv[5])
 		m->eat_num = ft_atoi(argv[5]);
 	m->forks = (pthread_mutex_t *)malloc(m->amount * sizeof(pthread_mutex_t));
-	pthread_mutex_init(&m->mutex, NULL); 
-	pthread_mutex_init(&m->print, NULL); 
-	init_philo(m);
+	if (pthread_mutex_init(&m->mutex, NULL) || \
+		pthread_mutex_init(&m->print, NULL))
+		return (2);
+	if (init_philo(m) || !m->forks)
+		return (1);
 	i = 0;
 	while (i < m->amount)
-		pthread_mutex_init(&(m->forks[i++]), NULL);
+	{
+		if (pthread_mutex_init(&(m->forks[i++]), NULL))
+			return (2);
+	}
 	m->start_time = get_time();
-}
-
-//static void	philo_run(char **params, int noeat)
-//{
-//	pthread_mutex_lock(&mutex);
-//	char *str1 = "aaaaaa";
-//	pthread_t p1;
-//
-//	pthread_create(&p1, NULL, print, (void*)str1);
-//	pthread_join(p1, NULL);
-//	printf("1 param: %s\nnoeat = %d\n", params[0], noeat);
-//	pthread_mutex_unlock(&mutex);
-//}
-
-int	main(int argc, char **argv)
-{
-	t_main *m;
-
-	m = (t_main *)malloc(sizeof(t_main));
-	// number, ttd, tte, tts, nofeat
-//	pthread_mutex_init(&mutex, NULL);
-//	struct_init(argv, argc, m);
-	if (argc >= 5 && argc <= 6)
-	{
-		struct_init(argv, m);
-		if (m->ttdie < 60 || m->ttsleep < 60 || m->tteat < 60)
-			return (printf("Time to die, Time to sleep, Time to eat shoul be > 60ms\n"));
-		// create_philo(m);
-		create_threads(m);
-		// int i = 0;
-		// while (i < m->amount)
-		// {
-		// 	pthread_join(*m->ph[i].thread, NULL);
-		// 	i++;
-		// }
-	}
-	else
-	{
-		printf("Incorrect number of arguments\n");
-		return (1);
-	}
 	return (0);
 }
 
-//  make re && ./philo_one 5 100 10 50 5
-//  make re && ./philo_one 5 200 60 60 2
-//  make re && ./philo_one 5 800 200 200 7
+static void	clear_mem(t_main *m)
+{
+	int	i;
+
+	i = 0;
+	while (i < m->amount)
+		pthread_mutex_destroy(&(m->forks[i++]));
+	pthread_mutex_destroy(&(m->print));
+	pthread_mutex_destroy(&(m->mutex));
+	if (m->forks)
+		free(m->forks);
+	if (m->ph)
+		free(m->ph);
+}
+
+static int	check_args(int argc, char **argv, t_main *m)
+{
+	if (!(argc >= 5 && argc <= 6))
+		printf("Incorrect number of arguments\n");
+	else if (struct_init(argv, m))
+		return (0);
+	else if (m->ttdie < 60 || m->ttsleep < 60 || m->tteat < 60)
+		printf("Time to die, sleep or eat should be > 60ms\n");
+	else
+		return (1);
+	return (0);
+}
+
+int	main(int argc, char **argv)
+{
+	t_main	*m;
+
+	m = (t_main *)malloc(sizeof(t_main));
+	if (!m)
+		return (1);
+	if (check_args(argc, argv, m))
+	{
+		if (create_threads(m))
+			return (1);
+	}
+	clear_mem(m);
+	free(m);
+	return (0);
+}

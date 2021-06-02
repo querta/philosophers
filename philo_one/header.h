@@ -9,10 +9,7 @@
 # include <sys/time.h>
 # include <stdint.h>
 
-typedef pthread_mutex_t mut_t;
-typedef struct 	timeval t_time;
-
-typedef enum		e_msg
+typedef enum e_msg
 {
 	FORK,
 	EAT,
@@ -21,24 +18,21 @@ typedef enum		e_msg
 	DIED
 }					t_msg;
 
-typedef struct 		s_phil
+typedef struct s_phil
 {
 	int				id;
-	int				dead;
 	pthread_t		*thread;
 	pthread_t		monitor;
-	pthread_mutex_t *left;
-	pthread_mutex_t *right;
-	uint64_t 		time;
+	pthread_mutex_t	*left;
+	pthread_mutex_t	*right;
+	uint64_t		time;
 	int				ate;
-	struct	s_main	*m;
+	struct s_main	*m;
 }					t_phil;
 
-
-typedef struct		s_main
+typedef struct s_main
 {
-	uint64_t 		start_time;
-	// pthread_t		*thread;
+	uint64_t		start_time;
 	int				id;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	mutex;
@@ -54,11 +48,9 @@ typedef struct		s_main
 
 int					main(int argc, char **argv);
 int					ft_atoi(char *str);
-// void				create_philo(t_main *m);
 void				msleep(uint64_t ms);
-void create_threads(t_main *m);
-uint64_t			get_time(void);
 uint64_t			timedelta(uint64_t saved_time);
-
+uint64_t			get_time(void);
+int					create_threads(t_main *m);
 
 #endif

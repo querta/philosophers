@@ -2,9 +2,9 @@ NAME = philo_one
 CC = clang
 HEADER = header.h
 CFLAG = -Wall -Werror -Wextra
-SRC = main.c utils.c create_threads.c # create_philo.c
-
+SRC = main.c utils.c create_threads.c
 OBJ = $(SRC:.c=.o)
+
 .PHONY: all, clean, fclean, re
 
 all: $(NAME)
