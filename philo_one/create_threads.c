@@ -2,6 +2,8 @@
 
 static int	printmsg(t_phil *ph, t_msg msg)
 {
+	if (ph->m->dead || !ph->ate)
+		return (1);
 	pthread_mutex_lock(&ph->m->print);
 	if (!ph->m->dead)
 	{
