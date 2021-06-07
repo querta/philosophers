@@ -51,6 +51,7 @@ int					ft_atoi(char *str);
 void				msleep(uint64_t ms);
 uint64_t			timedelta(uint64_t saved_time);
 uint64_t			get_time(void);
+void				ft_putendl_fd(char *s, int fd);
 int					create_threads(t_main *m);
 
 #endif

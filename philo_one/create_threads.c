@@ -2,21 +2,22 @@
 
 static int	printmsg(t_phil *ph, t_msg msg)
 {
-	if (ph->m->dead || !ph->ate)
-		return (1);
 	pthread_mutex_lock(&ph->m->print);
-	printf("%llums %d ", \
-		(unsigned long long)timedelta(ph->m->start_time), ph->id + 1);
-	if (msg == FORK)
-		printf("has taken a fork\n");
-	else if (msg == EAT)
-		printf("is eating\n");
-	else if (msg == SLEEP)
-		printf("is sleeping\n");
-	else if (msg == THINK)
-		printf("is thinking\n");
-	else if (msg == DIED)
-		printf("died\n");
+	if (!ph->m->dead)
+	{
+		printf("%llums %d ", \
+			(unsigned long long)timedelta(ph->m->start_time), ph->id + 1);
+		if (msg == FORK)
+			printf("has taken a fork\n");
+		else if (msg == EAT)
+			printf("is eating\n");
+		else if (msg == SLEEP)
+			printf("is sleeping\n");
+		else if (msg == THINK)
+			printf("is thinking\n");
+		else if (msg == DIED)
+			printf("died\n");
+	}
 	pthread_mutex_unlock(&ph->m->print);
 	return (0);
 }
@@ -51,7 +52,7 @@ static void	*monitor(void *p)
 	while (ph->ate)
 	{
 		pthread_mutex_lock(&ph->m->mutex);
-		if (((int)(timedelta(ph->time)) >= ph->m->ttdie) && !ph->m->dead)
+		if (((int)(timedelta(ph->time)) > ph->m->ttdie) && !ph->m->dead)
 		{
 			printmsg(ph, DIED);
 			ph->m->dead = 1;
@@ -59,7 +60,7 @@ static void	*monitor(void *p)
 			break ;
 		}
 		pthread_mutex_unlock(&ph->m->mutex);
-		msleep(2);
+		msleep(1);
 	}
 	return (NULL);
 }

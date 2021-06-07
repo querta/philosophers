@@ -23,24 +23,22 @@ static int	init_philo(t_main *m)
 	return (0);
 }
 
-static int	check_args(int argc, char **argv, t_main *m)
+static int	check_args(char **argv, t_main *m)
 {
-	if (!(argc >= 5 && argc <= 6))
-		printf("Incorrect number of arguments\n");
 	if (argv[5])
 		m->eat_num = ft_atoi(argv[5]);
 	if (m->amount <= 1)
-		printf("Bad number of philosophers. Try > 1\n");
+		ft_putendl_fd("Bad number of philosophers. Try > 1", 2);
 	else if (argv[5] && m->eat_num < 1)
-		printf("Nobody ate. Try times to eat > 0 or blank\n");
+		ft_putendl_fd("Nobody ate. Try times to eat > 0 or blank", 2);
 	else if (m->ttdie < 60 || m->ttsleep < 60 || m->tteat < 60)
-		printf("Time to die, sleep or eat should be > 60ms\n");
+		ft_putendl_fd("Time to die, sleep or eat should be > 60ms", 2);
 	else
 		return (1);
 	return (0);
 }
 
-static int	struct_init(int argc, char **argv, t_main *m)
+static int	struct_init(char **argv, t_main *m)
 {
 	int	i;
 
@@ -51,7 +49,7 @@ static int	struct_init(int argc, char **argv, t_main *m)
 	m->tteat = ft_atoi(argv[3]);
 	m->ttsleep = ft_atoi(argv[4]);
 	m->eat_num = -1;
-	if (!check_args(argc, argv, m))
+	if (!check_args(argv, m))
 		return (1);
 	m->forks = (pthread_mutex_t *)malloc(m->amount * sizeof(pthread_mutex_t));
 	if (pthread_mutex_init(&m->mutex, NULL) || \
@@ -88,15 +86,22 @@ int	main(int argc, char **argv)
 {
 	t_main	*m;
 
-	m = (t_main *)malloc(sizeof(t_main));
-	if (!m)
-		return (1);
-	if (!struct_init(argc, argv, m))
+	if (argc >= 5 && argc <= 6)
 	{
-		if (create_threads(m))
+		m = (t_main *)malloc(sizeof(t_main));
+		if (!m)
 			return (1);
-		clear_mem(m);
+		if (!struct_init(argv, m))
+		{
+			if (create_threads(m))
+				return (1);
+			clear_mem(m);
+			free(m);
+			return (EXIT_SUCCESS);
+		}
+		free(m);
 	}
-	free(m);
-	return (0);
+	else
+		ft_putendl_fd("Incorrect number of arguments", 2);
+	return (EXIT_FAILURE);
 }
