@@ -13,6 +13,7 @@ static int	init_philo(t_main *m)
 		m->ph[i].id = i;
 		m->ph[i].ate = m->eat_num;
 		m->ph[i].m = m;
+		m->ph[i].pid = -1;
 		i++;
 	}
 	return (0);
