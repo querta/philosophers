@@ -1,4 +1,4 @@
-NAME = philo_three
+NAME = philo
 CC = clang
 HEADER = header.h
 CFLAG = -Wall -Werror -Wextra -pthread
