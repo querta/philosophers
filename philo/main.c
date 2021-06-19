@@ -27,8 +27,8 @@ static int	check_args(char **argv, t_main *m)
 {
 	if (argv[5])
 		m->eat_num = ft_atoi(argv[5]);
-	if (m->amount <= 1)
-		ft_putendl_fd("Bad number of philosophers. Try > 1", 2);
+	if (m->amount <= 0)
+		ft_putendl_fd("Bad number of philosophers1", 2);
 	else if (argv[5] && m->eat_num < 1)
 		ft_putendl_fd("Nobody ate. Try times to eat > 0 or blank", 2);
 	else if (m->ttdie < 60 || m->ttsleep < 60 || m->tteat < 60)

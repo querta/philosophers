@@ -58,6 +58,7 @@ static void	*monitor(void *p)
 		{
 			printmsg(ph, DIED);
 			ph->m->dead = 1;
+            pthread_mutex_unlock(ph->left);
 			pthread_mutex_unlock(&ph->m->mutex);
 			break ;
 		}
