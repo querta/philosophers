@@ -4,10 +4,11 @@
 # include <string.h>
 # include <stdio.h>
 # include <pthread.h>
-# include <semaphore.h>
+# include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/time.h>
+# include <sys/wait.h>
 # include <stdint.h>
 # include <semaphore.h>
 # include <signal.h>
@@ -47,6 +48,7 @@ typedef struct s_main
 	int				tteat;
 	int				ttsleep;
 	int				eat_num;
+	int				pstatus;
 	t_phil			*ph;
 }					t_main;
 

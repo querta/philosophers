@@ -58,8 +58,8 @@ static void	*monitor(void *p)
 		{
 			printmsg(ph, DIED);
 			ph->m->dead = 1;
-			sem_post(ph->m->status);
-			break ;
+			sem_unlink("status");
+			exit (1);
 		}
 		sem_post(ph->m->status);
 		msleep(1);
@@ -76,67 +76,31 @@ static void	*act(t_phil	*ph)
 	while (ph->ate)
 	{
 		if (ph->m->dead || eat(ph))
-			break ;
+			exit(1);
 		printmsg(ph, THINK);
 	}
+	exit(1);
 	return (NULL);
 }
 
-static void kill_all(t_main *m)
+int	create_threads(t_main *m)
 {
 	int	i;
 
 	i = 0;
 	while (i < m->amount)
 	{
-		kill(m->ph[i++].pid, SIGKILL);
-	}
-}
-
-int	create_threads(t_main *m)
-{
-	int			i;
-	int status;
-	// pthread_t	*threads;
-
-	// threads = (pthread_t *)malloc(sizeof(pthread_t) * m->amount);
-	// if (!threads)
-	// 	return (1);
-	i = 0;
-	while (i < m->amount)
-	{
 		m->id = i;
-		if (m->ph[i].pid == -1)
-			m->ph[i].pid = fork();
-		if (m->ph[i].pid < 0)
-		{
-			kill_all(m);
-			return (1);
-		}
-		else if (m->ph[i].pid == 0)
-		{
-			act(m->ph);
-		}
-		// m->ph[i].thread = &threads[i];
+		m->ph[i].pid = fork();
+		if (m->ph[i].pid == 0)
+			act(&m->ph[i]);
 		i++;
 	}
 	i = 0;
-	// kill_all(m);
 	while (i < m->amount)
 	{
-		if (wait(&status) == -1)
-			return (1);
-		if (WIFEXITED(status))
-		{
-			if (WEXITSTATUS(status) == 1)
-				kill_all(m);
-			else if (WEXITSTATUS(status) == EXIT_FAILURE)
-			{
-				kill_all(m);
-				return (EXIT_FAILURE);
-			}
-		}
+		waitpid(-1, &m->pstatus, 0);
+		kill(m->ph[i++].pid, SIGKILL);
 	}
-	// free(threads);
 	return (0);
 }
