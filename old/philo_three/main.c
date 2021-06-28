@@ -13,6 +13,7 @@ static int	init_philo(t_main *m)
 		m->ph[i].id = i;
 		m->ph[i].ate = m->eat_num;
 		m->ph[i].m = m;
+		m->ph[i].pid = -1;
 		i++;
 	}
 	return (0);
@@ -23,7 +24,7 @@ static int	check_args(char **argv, t_main *m)
 	if (argv[5])
 		m->eat_num = ft_atoi(argv[5]);
 	if (m->amount <= 0)
-		ft_putendl_fd("Bad number of philosophers.", 2);
+		ft_putendl_fd("Bad number of philosophers", 2);
 	else if (argv[5] && m->eat_num < 1)
 		ft_putendl_fd("Nobody ate. Try times to eat > 0 or blank", 2);
 	else if (m->ttdie < 60 || m->ttsleep < 60 || m->tteat < 60)
